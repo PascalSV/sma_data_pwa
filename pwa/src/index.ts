@@ -12,6 +12,9 @@ declare global {
 
 const app = new Hono<{ Bindings: CloudflareEnv }>();
 
+// Central API base URL for upstream SMA reader
+const API_BASE = 'https://sma-data-pwa.everyday-apps.org';
+
 // Helper function to verify PWA access token
 function verifyPwaToken(c: any): boolean {
     const authHeader = c.req.header('Authorization');
@@ -96,7 +99,7 @@ function getAuthHeaders(c: any): HeadersInit {
 // API proxy endpoints for the solar data
 app.get('/api/current', async (c) => {
     try {
-        const response = await fetch('https://sma-reader.everyday-apps.org/api/current', {
+        const response = await fetch(`${API_BASE}/api/current`, {
             headers: getAuthHeaders(c)
         });
         const data = await response.json();
@@ -108,7 +111,7 @@ app.get('/api/current', async (c) => {
 
 app.get('/api/current-and-max', async (c) => {
     try {
-        const response = await fetch('https://sma-reader.everyday-apps.org/api/current-and-max', {
+        const response = await fetch(`${API_BASE}/api/current-and-max`, {
             headers: getAuthHeaders(c)
         });
         const data = await response.json();
@@ -120,7 +123,7 @@ app.get('/api/current-and-max', async (c) => {
 
 app.get('/api/today', async (c) => {
     try {
-        const response = await fetch('https://sma-reader.everyday-apps.org/api/today', {
+        const response = await fetch(`${API_BASE}/api/today`, {
             headers: getAuthHeaders(c)
         });
         const data = await response.json();
