@@ -4,12 +4,10 @@ main = "src/index.ts"
 
 compatibility_date = "2025-01-09"
 
-# Routes
-routes = [
-  { pattern = "sma-reader.everyday-apps.org/*", zone_id = "562991781207dfc9e64451bec4e2f17b" }
-]
+# Static Assets
+[assets]
+directory = "public"
 
-# Secrets and Production Configuration
 [env.production]
 vars = { ENVIRONMENT = "production" }
 secrets = ["SMA_READER_ACCESS"]
