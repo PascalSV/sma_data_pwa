@@ -4,14 +4,9 @@
     "description": "Solar meter API and PWA for Cloudflare Workers",
     "type": "module",
     "scripts": {
-        "build": "npm run build:api && npm run build:pwa",
-        "dev:api": "wrangler dev --config api/wrangler.toml",
-        "dev:pwa": "wrangler dev --config pwa/wrangler.toml",
-        "build:api": "tsc --project api/tsconfig.json --noEmit",
-        "build:pwa": "tsc --project pwa/tsconfig.json --noEmit",
-        "deploy:api": "wrangler deploy --config api/wrangler.toml",
-        "deploy:pwa": "wrangler deploy --config pwa/wrangler.toml",
-        "deploy": "npm run deploy:api && npm run deploy:pwa",
+        "dev": "wrangler dev --config wrangler.toml",
+        "build": "tsc --project tsconfig.json --noEmit",
+        "deploy": "wrangler deploy --config wrangler.toml",
         "type-check": "tsc --noEmit && tsc --project api/tsconfig.json --noEmit && tsc --project pwa/tsconfig.json --noEmit"
     },
     "dependencies": {

@@ -1,5 +1,6 @@
 name = "sma-data-pwa"
-main = "src/index.ts"
+# Point to the PWA worker that serves auth.html and proxies API
+main = "pwa/src/index.ts"
 
 # Align with latest deploy date
 compatibility_date = "2025-12-27"

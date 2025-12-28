@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { serveStatic } from 'hono/cloudflare-workers';
 
 interface CloudflareEnv {
     SMA_READER_ACCESS?: string;
@@ -13,7 +12,7 @@ declare global {
 const app = new Hono<{ Bindings: CloudflareEnv }>();
 
 // Central API base URL for upstream SMA reader
-const API_BASE = 'https://sma-data-pwa.everyday-apps.org';
+const API_BASE = 'https://sma-data-server.everyday-apps.org';
 
 // Helper function to verify PWA access token
 function verifyPwaToken(c: any): boolean {
@@ -67,15 +66,7 @@ app.get('/auth.html', (c) => {
     return c.html(getAuthPageHTML());
 });
 
-// Serve static files from the public directory
-// Use __STATIC_CONTENT_MANIFEST if available, otherwise serve from filesystem
-try {
-    const manifest = typeof __STATIC_CONTENT_MANIFEST !== 'undefined' ? __STATIC_CONTENT_MANIFEST : {};
-    app.use('/*', serveStatic({ root: './', manifest: manifest as any }));
-} catch (e) {
-    // Fallback: If manifest is not available (development mode), don't use serveStatic
-    console.log('Static manifest not available, using development mode');
-}
+// Static assets are served by Wrangler via [assets] in wrangler.toml; no Hono serveStatic needed.
 
 // Fallback routes for index.html and other common files
 app.get('/', (c) => {
@@ -99,7 +90,7 @@ function getAuthHeaders(c: any): HeadersInit {
 // API proxy endpoints for the solar data
 app.get('/api/current', async (c) => {
     try {
-        const response = await fetch(`${API_BASE}/api/current`, {
+        const response = await fetch(`${API_BASE}/current`, {
             headers: getAuthHeaders(c)
         });
         const data = await response.json();
@@ -111,7 +102,7 @@ app.get('/api/current', async (c) => {
 
 app.get('/api/current-and-max', async (c) => {
     try {
-        const response = await fetch(`${API_BASE}/api/current-and-max`, {
+        const response = await fetch(`${API_BASE}/current-and-max`, {
             headers: getAuthHeaders(c)
         });
         const data = await response.json();
@@ -123,13 +114,25 @@ app.get('/api/current-and-max', async (c) => {
 
 app.get('/api/today', async (c) => {
     try {
-        const response = await fetch(`${API_BASE}/api/today`, {
+        const response = await fetch(`${API_BASE}/today`, {
             headers: getAuthHeaders(c)
         });
         const data = await response.json();
         return c.json(data, response.status as any);
     } catch (error) {
         return c.json({ error: 'Failed to fetch today\'s data' }, 500 as any);
+    }
+});
+
+app.get('/api/yearly-yield', async (c) => {
+    try {
+        const response = await fetch(`${API_BASE}/yearly-yield`, {
+            headers: getAuthHeaders(c)
+        });
+        const data = await response.json();
+        return c.json(data, response.status as any);
+    } catch (error) {
+        return c.json({ error: 'Failed to fetch yearly\'s data' }, 500 as any);
     }
 });
 
