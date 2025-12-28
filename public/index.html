@@ -67,13 +67,21 @@
         body {
             font-family: 'D-DIN', 'Inter', 'SF Pro Display', 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: radial-gradient(120% 120% at 20% 20%, #192444 0%, #0c1120 45%, #080c18 100%);
+            background-attachment: fixed;
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             padding: 0;
+            margin: 0;
             color: var(--text);
             line-height: 1.6;
             padding-left: max(16px, env(safe-area-inset-left));
             padding-right: max(16px, env(safe-area-inset-right));
             padding-bottom: max(16px, env(safe-area-inset-bottom));
+        }
+
+        html {
+            height: -webkit-fill-available;
+            background-color: #0c1120;
         }
 
         .container {
