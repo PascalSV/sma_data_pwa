@@ -218,12 +218,21 @@ function initializeTimeSeries() {
                     beginAtZero: true,
                     ticks: {
                         callback: function (value) {
-                            return value.toLocaleString() + ' W';
+                            const isMobile = window.innerWidth <= 768;
+                            return isMobile ? value.toLocaleString() : value.toLocaleString() + ' W';
+                        },
+                        font: {
+                            size: window.innerWidth <= 768 ? 10 : 12
                         }
                     }
                 },
                 x: {
-                    display: true
+                    display: true,
+                    ticks: {
+                        font: {
+                            size: window.innerWidth <= 768 ? 10 : 12
+                        }
+                    }
                 }
             }
         }
@@ -267,7 +276,20 @@ function initializeYearlyYieldChart() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: (value) => `${value.toLocaleString()} kWh`
+                        callback: (value) => {
+                            const isMobile = window.innerWidth <= 768;
+                            return isMobile ? value.toLocaleString() : `${value.toLocaleString()} kWh`;
+                        },
+                        font: {
+                            size: window.innerWidth <= 768 ? 10 : 12
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: window.innerWidth <= 768 ? 10 : 12
+                        }
                     }
                 }
             }
